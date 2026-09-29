@@ -1,0 +1,12 @@
+{
+  "name": "jev-watch",
+  "owner": { "name": "local" },
+  "plugins": [
+    {
+      "name": "jev-watch",
+      "source": "./",
+      "description": "Logs what fast-jev-compaction does to JSONL files.",
+      "version": "0.1.0"
+    }
+  ]
+}
