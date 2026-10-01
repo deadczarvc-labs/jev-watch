@@ -7,15 +7,17 @@ JSONL file per session and day: `~/.claude/logs/jev-watch/<UTC date>_<session id
 | --- | --- |
 | `log` | every `$.ui.log` line of fast-jev; `outcome`: `kept`, `fallback`, `skipped`, `decisions` |
 | `http` | every TypeSafe request: method, URL without query, status, ms, error body (redacted) |
-| `compact` | every compaction that reaches this plugin: trigger, who asked, messages before/after, ms, the chain beneath with each link's outcome |
+| `compact` | every compaction that reaches this plugin: trigger, who asked, messages before/after, ms, the chain beneath with each link's outcome; `aborted: true` on a failure the turn's abort caused (Send now, Stop) |
 | `hook-failure` | a fast-jev hook threw or ran out of budget (`skipped`, `kept`, `expired`, `caught`, `rejected`) |
-| `not-seen` | first turn: fast-jev is not beneath jev-watch (not loaded, or listed before it in `enabledPlugins`) |
+| `not-seen` | first turn: fast-jev is not beneath jev-watch (not loaded, or seated above it) |
 
 Headers, bodies and query strings are never logged; long token-like runs are replaced by `<redacted>`.
 
-`jev-watch@jev-watch` must come **before** `fast-jev-compaction@fast-jev-compaction` in
-`enabledPlugins` (`~/.claude/settings.json`): the chain follows that order, and only a
-plugin above fast-jev sees its failures and the compactions it answers itself.
+jev-watch must sit **above** fast-jev-compaction: only a plugin above it sees its failures and the
+compactions it answers itself. `enabledPlugins` order did not hold that (after fast-jev moved to a
+directory marketplace on 2026-09-30, fast-jev sat outermost for `session.compact`), so
+`~/.claude/settings.json` pins it: `"prependPlugins": ["jev-watch@jev-watch"]` (honored from user settings
+on a machine without managed settings, for your own plugins).
 
 Problems only:
 

@@ -132,10 +132,12 @@ export const register: Register = (on, options) => {
       await failures($, watch, 'session.compact', next.trace);
       return result;
     } catch (error) {
+      // The engine throws one message for every failed summary; aborted tells Send now / Stop apart from a real error.
       await append($, {
         ...base,
         ms: Date.now() - started,
         error: redact(message(error)),
+        ...(next.signal.aborted ? { aborted: true } : {}),
         chain: chainOf(next.trace),
       });
       throw error;
@@ -143,15 +145,15 @@ export const register: Register = (on, options) => {
   });
 
   // The watched plugin hooks turn.complete; its link missing from the first
-  // trace means it is not loaded, or loaded above this one (enabledPlugins
-  // order), where its failures and own answers cannot be seen.
+  // trace means it is not loaded, or seated above this one (pin jev-watch with
+  // prependPlugins), where its failures and own answers cannot be seen.
   let checked = false;
   on('turn.complete', async ($, e, next) => {
     const result = await next(e);
     if (!checked) {
       checked = true;
       if (!next.trace.some((link) => link.plugin === watch)) {
-        const note = `${watch} is not beneath jev-watch: not loaded, or listed before jev-watch in enabledPlugins`;
+        const note = `${watch} is not beneath jev-watch: not loaded, or seated above it (settings.json prependPlugins: ["jev-watch@jev-watch"])`;
         await append($, { kind: 'not-seen', event: 'turn.complete', note });
         $.ui.log(`jev-watch: ${note}`);
       }
