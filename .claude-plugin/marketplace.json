@@ -1,6 +1,8 @@
 {
   "name": "jev-watch",
-  "owner": { "name": "local" },
+  "owner": {
+    "name": "deadczarvc-labs"
+  },
   "plugins": [
     {
       "name": "jev-watch",

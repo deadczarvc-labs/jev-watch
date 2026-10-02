@@ -13,6 +13,16 @@ JSONL file per session and day: `~/.claude/logs/jev-watch/<UTC date>_<session id
 
 Headers, bodies and query strings are never logged; long token-like runs are replaced by `<redacted>`.
 
+Install (function hooks need `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`, Claude Code 2.1.274+):
+
+```sh
+claude plugin marketplace add deadczarvc-labs/jev-watch
+claude plugin install jev-watch@jev-watch
+```
+
+It watches [jev-factkeep-compaction](https://github.com/deadczarvc-labs/jev-factkeep-compaction) (plugin id
+`fast-jev-compaction`). MIT license.
+
 jev-watch must sit **above** fast-jev-compaction: only a plugin above it sees its failures and the
 compactions it answers itself. `enabledPlugins` order did not hold that (after fast-jev moved to a
 directory marketplace on 2026-09-30, fast-jev sat outermost for `session.compact`), so
