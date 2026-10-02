@@ -18,8 +18,9 @@ compactions it answers itself. `enabledPlugins` order did not hold that (after f
 directory marketplace on 2026-09-30, fast-jev sat outermost for `session.compact`), so
 `~/.claude/settings.json` pins it: `"prependPlugins": ["jev-watch@jev-watch"]` (honored from user settings
 on a machine without managed settings, for your own plugins). Verified in `claude -p` (debug:
-`prependPlugins from user settings`); the desktop app's SDK sessions did not honor it on 2026-10-02
-(`not-seen` there), so in the desktop fast-jev's own answers show only as its `kept` / `fallback` log rows.
+`prependPlugins from user settings`). The desktop app hands plugins from directory marketplaces to the CLI as
+`--plugin-dir` plugins, named `<name>@inline` (2026-10-02), so it also needs `"jev-watch@inline"` in
+`prependPlugins` (and `pluginConfigs` keys `<name>` for their options).
 
 Problems only:
 
