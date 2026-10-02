@@ -1,6 +1,6 @@
 {
   "name": "jev-watch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Logs what fast-jev-compaction does (outcomes, TypeSafe requests, compactions, hook failures) to JSONL files.",
   "license": "MIT",
   "userConfig": {

@@ -155,7 +155,8 @@ export const register: Register = (on, options) => {
       if (!next.trace.some((link) => link.plugin === watch)) {
         const note = `${watch} is not beneath jev-watch: not loaded, or seated above it (settings.json prependPlugins: ["jev-watch@jev-watch"])`;
         await append($, { kind: 'not-seen', event: 'turn.complete', note });
-        $.ui.log(`jev-watch: ${note}`);
+        // Debug log only: the record above is the alarm; a transcript line read as broken compaction.
+        $.ui.log(`jev-watch: ${note}`, { to: 'debug' });
       }
     }
     await failures($, watch, 'turn.complete', next.trace);

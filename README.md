@@ -9,7 +9,7 @@ JSONL file per session and day: `~/.claude/logs/jev-watch/<UTC date>_<session id
 | `http` | every TypeSafe request: method, URL without query, status, ms, error body (redacted) |
 | `compact` | every compaction that reaches this plugin: trigger, who asked, messages before/after, ms, the chain beneath with each link's outcome; `aborted: true` on a failure the turn's abort caused (Send now, Stop) |
 | `hook-failure` | a fast-jev hook threw or ran out of budget (`skipped`, `kept`, `expired`, `caught`, `rejected`) |
-| `not-seen` | first turn: fast-jev is not beneath jev-watch (not loaded, or seated above it) |
+| `not-seen` | first turn: fast-jev is not beneath jev-watch (not loaded, or seated above it); its line goes to the debug log only |
 
 Headers, bodies and query strings are never logged; long token-like runs are replaced by `<redacted>`.
 
@@ -17,7 +17,9 @@ jev-watch must sit **above** fast-jev-compaction: only a plugin above it sees it
 compactions it answers itself. `enabledPlugins` order did not hold that (after fast-jev moved to a
 directory marketplace on 2026-09-30, fast-jev sat outermost for `session.compact`), so
 `~/.claude/settings.json` pins it: `"prependPlugins": ["jev-watch@jev-watch"]` (honored from user settings
-on a machine without managed settings, for your own plugins).
+on a machine without managed settings, for your own plugins). Verified in `claude -p` (debug:
+`prependPlugins from user settings`); the desktop app's SDK sessions did not honor it on 2026-10-02
+(`not-seen` there), so in the desktop fast-jev's own answers show only as its `kept` / `fallback` log rows.
 
 Problems only:
 
